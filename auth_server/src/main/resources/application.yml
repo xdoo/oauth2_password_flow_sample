@@ -1,0 +1,12 @@
+security.oauth2.client:
+    clientId: acme
+    clientSecret: acmesecret
+    authorized-grant-types: refresh_token,password
+    scope: openid
+    
+server:
+    port: 9999
+    contextPath: /uaa
+    
+security:
+    user.password: password
