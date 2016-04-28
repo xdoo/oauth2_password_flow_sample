@@ -1,4 +1,4 @@
-### Test Oauth2 Server
+### Test OAuth2 Server
 
 To test the OAuth2 Server open a console, move to your server home directory and fire up those commands:
 ```bash
@@ -14,4 +14,17 @@ $ TOKEN=232f6fe0-f117-4a0f-8dd6-9c7a7b5f1cd2
 $ curl -H "Authorization: Bearer $TOKEN" localhost:9999/uaa/user
 $ {"details":{"remoteAddress":"127.0.0.1","sessionId":null,"tokenValue":"232f6fe0-f117-4a0f-8dd6-9c7a7b5f1cd2","tokenType":"Bearer",.... 
 ```
+### Test Resource Service
 
+To test the resource service, keep the OAuth server running. Open a new console tap and start the resource service:
+
+```bash
+$ mvn clean package
+$ java -jar oauth-resource-0.0.1-SNAPSHOT.jar
+```
+
+Wait for the server and go back to the previous tab. The Bearer token still exists, so we simply can call:
+```bash
+$ curl -H "Authorization: Bearer $TOKEN" localhost:8070/hello
+$ Hello user
+```
