@@ -1,6 +1,7 @@
 package com.example;
 
 import java.security.Principal;
+import java.util.logging.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @EnableResourceServer
 public class Application {
 
+    private static final Logger LOG= Logger.getLogger( Application.class.getName() );
+    
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -37,6 +40,7 @@ public class Application {
      */
     @RequestMapping("/user")
     public Principal user(Principal user) {
+        LOG.info("reading user with name > " + user.getName());
         return user;
     }
 }
