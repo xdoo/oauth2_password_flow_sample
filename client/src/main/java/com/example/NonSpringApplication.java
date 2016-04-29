@@ -1,27 +1,16 @@
 package com.example;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 import org.apache.http.HttpHost;
-import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.AuthCache;
-import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
 /**
  *
@@ -30,6 +19,10 @@ import org.apache.http.util.EntityUtils;
 public class NonSpringApplication {
 
     private static final Logger LOG = Logger.getLogger(Application.class.getName());
+    
+    private Executor executor;
+    private final ObjectMapper mapper = new ObjectMapper();
+    private OAuth2TokenBean oauth;
 
     public static void main(String[] args) throws Exception {
         NonSpringApplication app = new NonSpringApplication();
@@ -37,25 +30,59 @@ public class NonSpringApplication {
     }
 
     private void run() throws URISyntaxException, IOException {
-        this.getToken();
+        // set security context
+        this.createExecutor();
+        
+        // aquire first token 
+        this.aquireToken();
+        LOG.info("aquired new OAuth token > " + this.oauth.getAccess_token());
+        
+        // call a protected resource
+        this.requestProtectedResource();
+        
+        // aquire a fresh token
+        this.refreshToken();
+        LOG.info("aquired fresh OAuth token > " + this.oauth.getAccess_token());
+        
+        // call protected resource with new token again
+        this.requestProtectedResource();
     }
     
-    private String getToken() throws URISyntaxException, IOException {
-        CredentialsProvider credsProvider = new BasicCredentialsProvider();
-        credsProvider.setCredentials(new AuthScope("localhost", AuthScope.ANY_PORT), new UsernamePasswordCredentials("acme", "acmesecret"));
-
-        // Create AuthCache instance
-        AuthCache authCache = new BasicAuthCache();
-        // Generate BASIC scheme object and add it to the local auth cache
-        BasicScheme basicAuth = new BasicScheme();
-        authCache.put(new HttpHost("localhost", 9999, "http"), basicAuth);
-
-        // Add AuthCache to the execution context
-        HttpClientContext context = HttpClientContext.create();
-        context.setCredentialsProvider(credsProvider);
-        context.setAuthCache(authCache);
-
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+    /**
+     * Call the OAuth2 protected 'hello' ressource.
+     * 
+     * @param uri 
+     */
+    private void requestProtectedResource() throws IOException {
+        
+        String result = Request
+                .Get("http://localhost:8070/hello")
+                .addHeader("Authorization", String.format(" Bearer %s", this.oauth.getAccess_token()))
+                .execute()
+                .returnContent()
+                .asString();
+        LOG.info("result from oauth protected resource > " + result);
+    }
+    
+    
+    /**
+     * Create the Basic Authentication context.
+     */
+    private void createExecutor() {
+        this.executor = Executor.newInstance()
+                .auth(new HttpHost("localhost", 9999, "http"), new UsernamePasswordCredentials("acme", "acmesecret"))
+                .authPreemptive(new HttpHost("localhost", 9999, "http"));
+    }
+    
+    /**
+     * Aquire token from OAuth2 Server.
+     * 
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException 
+     */
+    private void aquireToken() throws URISyntaxException, IOException {
+        // build uri with parameters (should be dynamic)
         URI uri = new URIBuilder()
                 .setScheme("http")
                 .setHost("localhost")
@@ -65,16 +92,24 @@ public class NonSpringApplication {
                 .setParameter("username", "user")
                 .setParameter("password", "password")
                 .build();
-        HttpPost httpPost = new HttpPost(uri);
-
-        LOG.info("Executing request " + httpPost.getRequestLine());
-
-        CloseableHttpResponse response = httpclient.execute(httpPost, context);
-        LOG.info(EntityUtils.toString(response.getEntity()));
-        response.close();
-        httpclient.close();
         
-        return "";
+        InputStream result = this.executor.execute(Request.Post(uri)).returnContent().asStream();
+        this.oauth = this.mapper.readValue(result, OAuth2TokenBean.class);
+    }
+    
+    private void refreshToken() throws URISyntaxException, IOException {
+        // build uri with parameters (should be dynamic)
+        URI uri = new URIBuilder()
+                .setScheme("http")
+                .setHost("localhost")
+                .setPort(9999)
+                .setPath("/uaa/oauth/token")
+                .setParameter("grant_type", "refresh_token")
+                .setParameter("refresh_token", this.oauth.getRefresh_token())
+                .build();
+        
+        InputStream result = this.executor.execute(Request.Post(uri)).returnContent().asStream();
+        this.oauth = this.mapper.readValue(result, OAuth2TokenBean.class);
     }
 
 }
