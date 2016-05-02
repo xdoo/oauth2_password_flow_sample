@@ -1,6 +1,7 @@
 package com.example;
 
 import java.security.Principal;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -40,7 +41,7 @@ public class Application {
      */
     @RequestMapping("/user")
     public Principal user(Principal user) {
-        LOG.info("reading user with name > " + user.getName());
+        LOG.log(Level.INFO, "reading user with name > {0}", user.getName());
         return user;
     }
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.http.HttpHost;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -35,14 +36,14 @@ public class NonSpringApplication {
         
         // aquire first token 
         this.aquireToken();
-        LOG.info("aquired new OAuth token > " + this.oauth.getAccess_token());
+        LOG.log(Level.INFO, "aquired new OAuth token > {0}", this.oauth.getAccess_token());
         
         // call a protected resource
         this.requestProtectedResource();
         
         // aquire a fresh token
         this.refreshToken();
-        LOG.info("aquired fresh OAuth token > " + this.oauth.getAccess_token());
+        LOG.log(Level.INFO, "aquired fresh OAuth token > {0}", this.oauth.getAccess_token());
         
         // call protected resource with new token again
         this.requestProtectedResource();
@@ -61,7 +62,7 @@ public class NonSpringApplication {
                 .execute()
                 .returnContent()
                 .asString();
-        LOG.info("result from oauth protected resource > " + result);
+        LOG.log(Level.INFO, "result from oauth protected resource > {0}", result);
     }
     
     
