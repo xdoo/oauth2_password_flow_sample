@@ -71,8 +71,7 @@ public class Application extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
-//                .withClientDetails(jdbcClientDetailsService)
-                .inMemory()
+                .jdbc(dataSource)
                 .withClient("acme")
                 .secret("acmesecret")
                 .authorizedGrantTypes("password", "refresh_token")
