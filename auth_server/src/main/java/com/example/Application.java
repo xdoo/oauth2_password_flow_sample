@@ -1,6 +1,8 @@
 package com.example;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
@@ -16,7 +18,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -109,14 +110,34 @@ public class Application extends AuthorizationServerConfigurerAdapter {
     }
     
     /**
-     * Endpoint to add oauth2 client.
+     * Endpoint to add a new oauth2 client.
      * 
-     * @param clientDetails 
+     * @param config
      */
     @RequestMapping(value = "/client", method = RequestMethod.POST)
-    public void addClient(@RequestBody ClientDetails clientDetails) {
-        LOG.log(Level.INFO, "add client with id > {0}", clientDetails.getClientId());
-        this.jdbcClientDetailsService.addClientDetails(clientDetails);
+    public void addClient(@RequestBody ClientConfig config) {
+        LOG.log(Level.INFO, "add client with id > {0}", config.getClientId());
+        
+        BaseClientDetails detail = new BaseClientDetails();
+        
+        // credentials
+        detail.setClientId(config.getClientId());
+        detail.setClientSecret(config.getClientSecret());
+        // token validity (one day)
+        detail.setAccessTokenValiditySeconds(60 * 60 * 24);
+        // grant types
+        List<String> grantTypes = new ArrayList<>();
+        grantTypes.add("password");
+        grantTypes.add("refresh_token");
+        detail.setAuthorizedGrantTypes(grantTypes);
+        // scopes
+        List<String> scopes = new ArrayList<>();
+        scopes.add("read");
+        scopes.add("write");
+        detail.setScope(grantTypes);
+        
+        
+        this.jdbcClientDetailsService.addClientDetails(detail);
     }
     
     /**
@@ -136,7 +157,12 @@ public class Application extends AuthorizationServerConfigurerAdapter {
      * @return 
      */
     @RequestMapping(value = "/client", method = RequestMethod.GET)
-    public ClientDetails getEmptyClientDetails() {
-        return new BaseClientDetails();
+    public ClientConfig getEmptyClientDetails() {
+        LOG.log(Level.INFO, "requesting new client configuration");
+        ClientConfig config = new ClientConfig();
+        config.setClientId("my-clientId");
+        config.setClientSecret("my-clientSecret");
+        
+        return config;
     }
 }
