@@ -1,30 +1,9 @@
 package com.example;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.sql.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.client.BaseClientDetails;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * You simply can test this with curl:
@@ -37,132 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @author straubec
  */
 @SpringBootApplication
-@EnableAuthorizationServer
-@RestController
-@Configuration
-@EnableResourceServer
 public class Application extends AuthorizationServerConfigurerAdapter {
 
     private static final Logger LOG= Logger.getLogger( Application.class.getName() );
-    
-    @Autowired
-    private DataSource dataSource;
-    
-    @Autowired
-    private JdbcClientDetailsService jdbcClientDetailsService;
-    
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    
-    @Bean
-    public JdbcClientDetailsService jdbcClientDetailsService() {
-        return new JdbcClientDetailsService(dataSource);
-    }
+   
     
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    /**
-     * Configure OAuth2 to store clients inside a database.
-     * 
-     * @param clients
-     * @throws Exception 
-     */
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients
-                .jdbc(dataSource)
-                .withClient("acme")
-                .secret("acmesecret")
-                .authorizedGrantTypes("password", "refresh_token")
-                .authorities("USER")
-                .scopes("read", "write")
-                ;
-    }
-
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-        super.configure(security); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints
-                // inject this to enable password grants
-                // see http://projects.spring.io/spring-security-oauth/docs/oauth2.html
-                .authenticationManager(this.authenticationManager);
-    }
-    
-    
-    
-
-    /**
-     * User info endpoint. 
-     * 
-     * @param user
-     * @return 
-     */
-    @RequestMapping("/user")
-    public Principal user(Principal user) {
-        LOG.log(Level.INFO, "reading user with name > {0}", user.getName());
-        return user;
-    }
-    
-    /**
-     * Endpoint to add a new oauth2 client.
-     * 
-     * @param config
-     */
-    @RequestMapping(value = "/client", method = RequestMethod.POST)
-    public void addClient(@RequestBody ClientConfig config) {
-        LOG.log(Level.INFO, "add client with id > {0}", config.getClientId());
-        
-        BaseClientDetails detail = new BaseClientDetails();
-        
-        // credentials
-        detail.setClientId(config.getClientId());
-        detail.setClientSecret(config.getClientSecret());
-        // token validity (one day)
-        detail.setAccessTokenValiditySeconds(60 * 60 * 24);
-        // grant types
-        List<String> grantTypes = new ArrayList<>();
-        grantTypes.add("password");
-        grantTypes.add("refresh_token");
-        detail.setAuthorizedGrantTypes(grantTypes);
-        // scopes
-        List<String> scopes = new ArrayList<>();
-        scopes.add("read");
-        scopes.add("write");
-        detail.setScope(grantTypes);
-        
-        
-        this.jdbcClientDetailsService.addClientDetails(detail);
-    }
-    
-    /**
-     * Endpoint to remove oauth2 client.
-     * 
-     * @param clientId 
-     */
-    @RequestMapping(value = "/client", method = RequestMethod.DELETE)
-    public void removeClient(@RequestParam("clientId") String clientId) {
-        LOG.log(Level.INFO, "remove client with id > {0}", clientId);
-        this.jdbcClientDetailsService.removeClientDetails(clientId);
-    }
-    
-    /**
-     * Endpoint to get a new oauth2 client detail template.
-     * 
-     * @return 
-     */
-    @RequestMapping(value = "/client", method = RequestMethod.GET)
-    public ClientConfig getEmptyClientDetails() {
-        LOG.log(Level.INFO, "requesting new client configuration");
-        ClientConfig config = new ClientConfig();
-        config.setClientId("my-clientId");
-        config.setClientSecret("my-clientSecret");
-        
-        return config;
-    }
 }
