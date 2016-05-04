@@ -19,9 +19,9 @@ import org.springframework.security.oauth2.provider.client.JdbcClientDetailsServ
  */
 @EnableAuthorizationServer
 @Configuration
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+public class CustomAuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
     
-    private static final Logger LOG= Logger.getLogger( AuthorizationServerConfiguration.class.getName() );
+    private static final Logger LOG= Logger.getLogger(CustomAuthorizationServerConfiguration.class.getName() );
     
         
     @Autowired

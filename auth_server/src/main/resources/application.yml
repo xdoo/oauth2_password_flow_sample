@@ -3,8 +3,9 @@ server:
     port: 9999
     contextPath: /uaa
     
-security:
-    user.password: password
+#security:
+#    user.password: password
+security.basic.enabled: false
     
 logging:
   level:

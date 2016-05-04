@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
@@ -25,14 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @EnableResourceServer
 @RestController
-public class AuthorizationServerAdmin {
+public class AuthorizationServerAdmin extends ResourceServerConfigurerAdapter {
     
     private static final Logger LOG= Logger.getLogger(AuthorizationServerAdmin.class.getName() );
     
     @Autowired
-    private JdbcClientDetailsService jdbcClientDetailsService;
+    private JdbcClientDetailsService jdbcClientDetailsService;    
     
-        /**
+    /**
      * User info endpoint. 
      * 
      * @param user
@@ -49,8 +53,8 @@ public class AuthorizationServerAdmin {
      * 
      * @param config
      */
-    @RequestMapping(value = "/client", method = RequestMethod.POST)
-    public void addClient(@RequestBody ClientConfig config) {
+    @RequestMapping(value = "/admin/client", method = RequestMethod.POST)
+    public void addClient(@RequestBody ClientConfigBean config) {
         LOG.log(Level.INFO, "add client with id > {0}", config.getClientId());
         this.jdbcClientDetailsService.addClientDetails(this.createClientDetails(config));
     }
@@ -60,7 +64,7 @@ public class AuthorizationServerAdmin {
      * 
      * @param clientId 
      */
-    @RequestMapping(value = "/client", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/admin/client", method = RequestMethod.DELETE)
     public void removeClient(@RequestParam("clientId") String clientId) {
         LOG.log(Level.INFO, "remove client with id > {0}", clientId);
         this.jdbcClientDetailsService.removeClientDetails(clientId);
@@ -71,10 +75,10 @@ public class AuthorizationServerAdmin {
      * 
      * @return 
      */
-    @RequestMapping(value = "/client", method = RequestMethod.GET)
-    public ClientConfig getEmptyClientDetails() {
+    @RequestMapping(value = "/admin/client", method = RequestMethod.GET)
+    public ClientConfigBean getEmptyClientDetails() {
         LOG.log(Level.INFO, "requesting new client configuration");
-        ClientConfig config = new ClientConfig();
+        ClientConfigBean config = new ClientConfigBean();
         config.setClientId("my-clientId");
         config.setClientSecret("my-clientSecret");
         
@@ -89,7 +93,7 @@ public class AuthorizationServerAdmin {
      * @param config
      * @return 
      */
-    private ClientDetails createClientDetails(ClientConfig config) {
+    private ClientDetails createClientDetails(ClientConfigBean config) {
         
         // fill client detail configuration
         BaseClientDetails detail = new BaseClientDetails();

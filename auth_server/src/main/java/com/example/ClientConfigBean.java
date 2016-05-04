@@ -4,7 +4,7 @@ package com.example;
  *
  * @author straubec
  */
-public class ClientConfig {
+public class ClientConfigBean {
     
     private String clientId;
     private String clientSecret;
