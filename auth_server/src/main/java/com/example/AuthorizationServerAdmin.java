@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ * This class provides endpoints to communicate with the OAuth2 Server. You 
+ * can get user information. Or you can add and delete new clients.
+ * 
+ * 
  * @author straubec
  */
 @EnableResourceServer
