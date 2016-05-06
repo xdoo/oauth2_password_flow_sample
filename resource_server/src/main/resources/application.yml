@@ -1,7 +1,11 @@
 server:
   port: 8070
 
-security.oauth2.resource.userInfoUri: http://localhost:9999/uaa/user
+security:
+    oauth2.resource.userInfoUri: http://localhost:9999/uaa/user
+#    user.password: password
+
+management.security.enabled: false
         
 logging:
   level:
