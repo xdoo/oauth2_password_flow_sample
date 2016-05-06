@@ -7,7 +7,7 @@ security:
 
 management.security.enabled: false
         
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
+#    org.springframework.web: DEBUG
