@@ -19,7 +19,7 @@ import org.apache.http.client.utils.URIBuilder;
  */
 public class NonSpringApplication {
 
-    private static final Logger LOG = Logger.getLogger(ZuulApplication.class.getName());
+    private static final Logger LOG = Logger.getLogger(NonSpringApplication.class.getName());
     
     private Executor executor;
     private final ObjectMapper mapper = new ObjectMapper();

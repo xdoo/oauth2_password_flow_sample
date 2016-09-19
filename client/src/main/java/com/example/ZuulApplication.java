@@ -3,19 +3,19 @@ package com.example;
 import java.util.logging.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.oauth2.client.resource.OAuth2ProtectedResourceDetails;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 @SpringBootApplication
-@EnableOAuth2Client
-public class Application {
+@EnableZuulProxy
+public class ZuulApplication {
 
-    private static final Logger LOG= Logger.getLogger( Application.class.getName() );
+    private static final Logger LOG= Logger.getLogger(ZuulApplication.class.getName() );
     
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication.run(ZuulApplication.class, args);
     }
 
     @Bean
