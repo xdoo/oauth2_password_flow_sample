@@ -20,7 +20,7 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
         auth
             .inMemoryAuthentication()
                 .withUser("user").password("password").roles("USER").and()
-                .withUser("admin").password("password").roles("USER", "ADMIN");
+                .withUser("admin").password("password").roles("USER", "ADMIN", "FOO_SERVICE_HELLO");
     }
 
     @Override
