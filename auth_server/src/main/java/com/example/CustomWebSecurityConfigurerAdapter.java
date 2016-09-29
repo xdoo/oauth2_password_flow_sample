@@ -22,13 +22,6 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
                 .withUser("user01").password("password").roles("USER", "RESOURCE_001_HELLO").and()
                 .withUser("user02").password("password").roles("USER", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO").and()
                 .withUser("admin").password("admin").roles("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO");
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-    }
-    
-    
+    }    
     
 }
