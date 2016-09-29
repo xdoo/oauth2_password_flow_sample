@@ -13,23 +13,8 @@ public class CustomResourceServerConfigurerAdapter extends ResourceServerConfigu
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        
-           // only secure channel, https, is allowed
-//           http.requiresChannel().anyRequest().requiresSecure();
-
-           // static resources
-           http.authorizeRequests().antMatchers("/uaa/h2-console").permitAll();
-
-           http.authorizeRequests().anyRequest().authenticated();
-        
-//        http
-//                .requestMatchers()
-//                    .antMatchers("/uaa/client/**", "/uaa/user")
-//                .and()
-//                    .authorizeRequests().anyRequest().hasAuthority("USER_ADMIN")
-//                ;
-//        
-//        http.csrf().disable();
+           http.
+                   authorizeRequests().anyRequest().authenticated();
     }
 
 }
