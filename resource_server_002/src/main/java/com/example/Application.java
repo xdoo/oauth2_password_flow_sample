@@ -22,19 +22,9 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Secured("ROLE_FOO_SERVICE_HELLO")
+    @Secured("ROLE_RESOURCE_002_HELLO")
     @RequestMapping("/hello")
     public String home(Principal user) {   
-        return this.calculateHello(user);
+        return "Hello " + user.getName() + "\n";
     }
-    
-    @HystrixCommand(fallbackMethod = "defaultHello")
-    private String calculateHello(Principal user) {
-        return "Hello " + user.getName();
-    }
-    
-    private String defaultHello(){
-        return "Hello World!";
-    }
-    
 }
