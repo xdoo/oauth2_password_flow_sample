@@ -1,0 +1,13 @@
+server:
+  port: 8071
+
+security:
+    oauth2.resource.userInfoUri: http://localhost:9999/uaa/user
+#    user.password: password
+
+management.security.enabled: false
+        
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
+#    org.springframework.web: DEBUG
