@@ -49,7 +49,6 @@ public class CustomAuthorizationServerConfiguration extends AuthorizationServerC
                 .withClient("acme")
                 .secret("acmesecret")
                 .authorizedGrantTypes("password", "refresh_token")
-                .authorities("USER")
                 .scopes("read", "write")
                 ;
     }
