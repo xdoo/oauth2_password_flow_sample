@@ -45,7 +45,7 @@ public class CustomAuthorizationServerConfiguration extends AuthorizationServerC
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients
                 .jdbc(dataSource)
-                // this is the default user (admin)
+                // this is the default client
                 .withClient("acme")
                 .secret("acmesecret")
                 .authorizedGrantTypes("password", "refresh_token")
