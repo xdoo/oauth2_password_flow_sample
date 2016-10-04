@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -14,10 +13,11 @@ import org.springframework.security.authentication.AuthenticationCredentialsNotF
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class DemoApplicationTests {
+public class MyControllerTests {
     
     @Rule
     public final ExpectedException exception = ExpectedException.none();
