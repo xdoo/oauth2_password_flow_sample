@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MyController {
 
-    private MyService service;
+    private final MyService service;
 
     public MyController(MyService service) {
         this.service = service;
