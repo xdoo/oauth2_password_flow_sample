@@ -12,7 +12,8 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 
 /**
- *
+ * OAuth Server for integration tests.
+ * 
  * @author straubec
  */
 @Configuration
@@ -49,9 +50,9 @@ class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter{
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .inMemoryAuthentication()
-                .withUser("user01").password("password").roles("USER", "RESOURCE_001_HELLO").and()
-                .withUser("user02").password("password").roles("USER", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO").and()
-                .withUser("admin").password("admin").roles("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO");
+                .withUser("user01").password("password").roles("USER").and()
+                .withUser("user02").password("password").roles("USER", "RESOURCE_002_HELLO", "RESOURCE_002_HELLOWORLD").and()
+                .withUser("admin").password("admin").roles("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLOWORLD");
     }
     
 }
