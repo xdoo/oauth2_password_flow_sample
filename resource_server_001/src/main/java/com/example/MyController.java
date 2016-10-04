@@ -20,7 +20,7 @@ public class MyController {
     @Secured("ROLE_RESOURCE_001_HELLO")
     @RequestMapping("/hello")
     public String home() {
-        return this.service.calculateHello();
+        return this.service.sayHello();
     }
 
 }

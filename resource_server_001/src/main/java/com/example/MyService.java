@@ -25,7 +25,7 @@ public class MyService {
     }
     
     @HystrixCommand(fallbackMethod = "defaultHello")
-    public String calculateHello() {
+    public String sayHello() {
         ResponseEntity<String> response = this.template.getForEntity("http://localhost:8071/hello", String.class);
         return "Answer: " + response.getBody();
     }
