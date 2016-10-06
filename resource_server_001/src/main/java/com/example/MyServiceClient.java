@@ -5,8 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -14,18 +14,19 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @EnableCircuitBreaker
-public class MyService {
+public class MyServiceClient {
     
-    private static final Logger LOG= Logger.getLogger( MyService.class.getName() );
+    private static final Logger LOG= Logger.getLogger(MyServiceClient.class.getName() );
     
-    OAuth2RestTemplate template;
+    protected RestTemplate template;
 
-    public MyService(OAuth2RestTemplate template) {
+    public MyServiceClient(RestTemplate template) {
         this.template = template;
     }
     
     @HystrixCommand(fallbackMethod = "defaultHello")
-    public String calculateHello() {
+    public String sayHello() {
+        // hack for demo
         ResponseEntity<String> response = this.template.getForEntity("http://localhost:8071/hello", String.class);
         return "Answer: " + response.getBody();
     }
