@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -41,6 +42,20 @@ public class MyServiceTests {
         this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withSuccess("Hello Hans!", MediaType.TEXT_PLAIN));
         String greeting = this.service.sayHello();
         assertThat(greeting, startsWith("Answer: Hello Hans!"));
+    }
+    
+    @Test
+    public void testSayHello401() {
+        this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withStatus(HttpStatus.FORBIDDEN));
+        String greeting = this.service.sayHello();
+        assertThat(greeting, startsWith("Fallback Answer: Hello World!"));
+    }
+    
+    @Test
+    public void testSayHelloServerError() {
+        this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withServerError());
+        String greeting = this.service.sayHello();
+        assertThat(greeting, startsWith("Fallback Answer: Hello World!"));
     }
     
 }
