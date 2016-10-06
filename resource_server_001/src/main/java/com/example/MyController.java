@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MyController {
 
-    private final MyService service;
+    private final MyServiceClient service;
 
-    public MyController(MyService service) {
+    public MyController(MyServiceClient service) {
         this.service = service;
     }
 
     @Secured("ROLE_RESOURCE_001_HELLO")
     @RequestMapping("/hello")
-    public String home() {
+    public String sayHello() {
         return this.service.sayHello();
     }
 

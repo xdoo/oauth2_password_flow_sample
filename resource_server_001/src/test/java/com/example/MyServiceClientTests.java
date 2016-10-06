@@ -14,6 +14,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 import org.springframework.web.client.RestTemplate;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  *
@@ -21,10 +22,10 @@ import org.springframework.web.client.RestTemplate;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest()
-public class MyServiceTests {
+public class MyServiceClientTests {
     
     @Autowired
-    private MyService service;
+    private MyServiceClient service;
     
     @Autowired
     private RestTemplate restTemplate;

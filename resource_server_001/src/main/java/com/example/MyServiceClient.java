@@ -14,13 +14,13 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 @EnableCircuitBreaker
-public class MyService {
+public class MyServiceClient {
     
-    private static final Logger LOG= Logger.getLogger( MyService.class.getName() );
+    private static final Logger LOG= Logger.getLogger(MyServiceClient.class.getName() );
     
     protected RestTemplate template;
 
-    public MyService(RestTemplate template) {
+    public MyServiceClient(RestTemplate template) {
         this.template = template;
     }
     
