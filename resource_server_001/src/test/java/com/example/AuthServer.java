@@ -51,7 +51,7 @@ class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter{
         auth
             .inMemoryAuthentication()
                 .withUser("user01").password("password").roles("USER").and()
-                .withUser("user02").password("password").roles("USER", "RESOURCE_002_HELLO", "RESOURCE_002_HELLOWORLD").and()
+                .withUser("user02").password("password").roles("USER","RESOURCE_001_HELLO", "RESOURCE_002_HELLO", "RESOURCE_002_HELLOWORLD").and()
                 .withUser("admin").password("admin").roles("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLOWORLD");
     }
     
