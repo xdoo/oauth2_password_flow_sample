@@ -90,7 +90,7 @@ public class NonSpringApplication {
                 .setPort(9999)
                 .setPath("/uaa/oauth/token")
                 .setParameter("grant_type", "password")
-                .setParameter("username", "user")
+                .setParameter("username", "user02")
                 .setParameter("password", "password")
                 .build();
         
