@@ -50,9 +50,9 @@ class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter{
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .inMemoryAuthentication()
-                .withUser("user01").password("password").roles("USER").and()
-                .withUser("user02").password("password").roles("USER","RESOURCE_001_HELLO", "RESOURCE_002_HELLO", "RESOURCE_002_HELLOWORLD").and()
-                .withUser("admin").password("admin").roles("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLOWORLD");
+                .withUser("user01").password("password").authorities("USER").and()
+                .withUser("user02").password("password").authorities("USER","RESOURCE_001_HELLO", "RESOURCE_002_HELLO", "RESOURCE_002_HELLOWORLD").and()
+                .withUser("admin").password("admin").authorities("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLOWORLD");
     }
     
 }

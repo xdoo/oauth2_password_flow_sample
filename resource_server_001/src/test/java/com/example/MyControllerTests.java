@@ -9,7 +9,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -45,7 +44,7 @@ public class MyControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "Hans", roles = {"RESOURCE_001_HELLO"})
+    @WithMockUser(username = "Hans", authorities = {"RESOURCE_001_HELLO"})
     public void testSayHello() {
         this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withSuccess("Hello Hans!", MediaType.TEXT_PLAIN));
         String greeting = this.controller.sayHello();
@@ -59,7 +58,7 @@ public class MyControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "Hans", roles = {"DUMMY"})
+    @WithMockUser(username = "Hans", authorities = {"DUMMY"})
     public void testSayHelloWithWrongRole() {
         this.exception.expect(AccessDeniedException.class);
         this.controller.sayHello();
