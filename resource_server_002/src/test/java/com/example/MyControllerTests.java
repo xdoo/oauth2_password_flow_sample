@@ -26,7 +26,7 @@ public class MyControllerTests {
     private MyController controller;
 
     @Test
-    @WithMockUser(username="hans",roles={"RESOURCE_002_HELLOWORLD"})
+    @WithMockUser(username="hans",authorities = {"RESOURCE_002_HELLOWORLD"})
     public void testHelloWorld() {
         assertThat(this.controller.helloWorld(), startsWith("Hello World!"));
     }
@@ -45,7 +45,7 @@ public class MyControllerTests {
     }
     
     @Test
-    @WithMockUser(username="hans",roles={"RESOURCE_002_HELLO"})
+    @WithMockUser(username="hans",authorities={"RESOURCE_002_HELLO"})
     public void testHello() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         assertThat(this.controller.hello(authentication), startsWith("Hello hans!"));
