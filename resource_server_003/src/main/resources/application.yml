@@ -1,0 +1,20 @@
+server:
+  port: 8072
+
+security:
+    oauth2.resource.userInfoUri: http://localhost:9999/uaa/user
+#    user.password: password
+
+management.security.enabled: false
+
+spring.datasource:
+    url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+    database-platform: org.hibernate.dialect.H2Dialect
+        
+#logging:
+#  level:
+#    org.springframework.security: DEBUG
+#    org.springframework.web: DEBUG
