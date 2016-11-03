@@ -1,22 +1,28 @@
 package com.example;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
- *
+ * Hello Bean.
+ * 
  * @author straubec
  */
-@Entity
 public class Hello {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    public Hello() { }
 
+    public Hello(String name, String city) {
+        this.name = name;
+        this.city = city;
+    }
+
+    @Pattern(regexp = "[a-zA-Z ]*")
+    @Size(min = 3, max = 50)
     private String name;
+    
+    @Pattern(regexp = "[a-zA-Z ]*")
+    @Size(min = 3, max = 60)
     private String city;
 
     public String getName() {

@@ -1,3 +1,5 @@
+spring.application.name: resource001
+
 server:
   port: 8070
 

@@ -25,13 +25,13 @@ public class MyServiceClient {
     }
     
     @HystrixCommand(fallbackMethod = "defaultHello")
-    public String sayHello() {
+    public String sayHello(Hello hello) {
         // hack for demo
         ResponseEntity<String> response = this.template.getForEntity("http://localhost:8071/hello", String.class);
-        return "Answer: " + response.getBody();
+        return String.format("Answer for %s from %s: " + response.getBody(), hello.getName(), hello.getCity());
     }
 
-    public String defaultHello(Throwable e) {
+    public String defaultHello(Hello hello, Throwable e) {
         LOG.log(Level.SEVERE, e.getMessage());
         return "Fallback Answer: Hello World!\n";
     }

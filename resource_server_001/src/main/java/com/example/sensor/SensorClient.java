@@ -6,6 +6,6 @@ package com.example.sensor;
  */
 public interface SensorClient {
     
-    public void detect();
+    public void detect(SensorEvent event);
     
 }

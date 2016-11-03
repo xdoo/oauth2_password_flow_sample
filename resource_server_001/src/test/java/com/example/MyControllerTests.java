@@ -47,21 +47,21 @@ public class MyControllerTests {
     @WithMockUser(username = "Hans", authorities = {"RESOURCE_001_HELLO"})
     public void testSayHello() {
         this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withSuccess("Hello Hans!", MediaType.TEXT_PLAIN));
-        String greeting = this.controller.sayHello();
-        assertThat(greeting, startsWith("Answer: Hello Hans!"));
+        String greeting = this.controller.sayHello(new Hello("Peter", "Munich"));
+        assertThat(greeting, startsWith("Answer for Peter from Munich: Hello Hans!"));
     }
 
     @Test
     public void testSayHelloWithoutSecurity() {
         this.exception.expect(AuthenticationCredentialsNotFoundException.class);
-        this.controller.sayHello();
+        this.controller.sayHello(new Hello("Peter", "Munich"));
     }
 
     @Test
     @WithMockUser(username = "Hans", authorities = {"DUMMY"})
     public void testSayHelloWithWrongRole() {
         this.exception.expect(AccessDeniedException.class);
-        this.controller.sayHello();
+        this.controller.sayHello(new Hello("Peter", "Munich"));
     }
 
 }
