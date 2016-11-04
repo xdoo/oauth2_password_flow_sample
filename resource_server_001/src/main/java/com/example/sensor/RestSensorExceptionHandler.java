@@ -26,16 +26,16 @@ public class RestSensorExceptionHandler extends ResponseEntityExceptionHandler {
     
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        SensorEvent sensorEvent = this.sensorEventFactory.createSensorEvent("RequestException","RE1", request.getUserPrincipal().getName());
+        SensorEvent sensorEvent = this.sensorEventFactory.createSensorEvent("Request","METHOD NOT SUPPORTED", request.getUserPrincipal().getName());
         this.sensor.detect(sensorEvent);
         return super.handleHttpRequestMethodNotSupported(ex, headers, status, request);
     }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        SensorEvent sensorEvent = this.sensorEventFactory.createSensorEvent("RequestException","RE7", request.getUserPrincipal().getName());
+        SensorEvent sensorEvent = this.sensorEventFactory.createSensorEvent("Request","BEAN VALIDATION FAILURE", request.getUserPrincipal().getName());
         sensorEvent.setErrors(ex.getBindingResult().getAllErrors());
         this.sensor.detect(sensorEvent);
-        return super.handleMethodArgumentNotValid(ex, headers, status, request); //To change body of generated methods, choose Tools | Templates.
+        return super.handleMethodArgumentNotValid(ex, headers, status, request);
     }
 }
