@@ -5,7 +5,8 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 
 /**
- *
+ * Dummy implementation of appSensor.
+ * 
  * @author straubec
  */
 @Service

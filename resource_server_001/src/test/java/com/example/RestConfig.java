@@ -6,7 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
 /**
- *
+ * We need this rest template to call our service mocks.
+ * 
  * @author straubec
  */
 @TestConfiguration

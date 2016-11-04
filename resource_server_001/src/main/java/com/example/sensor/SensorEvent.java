@@ -4,7 +4,9 @@ import java.util.List;
 import org.springframework.validation.ObjectError;
 
 /**
- *
+ * The sensor event with some base information. Most of them should match to
+ * the appSensor event structure.
+ * 
  * @author straubec
  */
 public class SensorEvent {

@@ -10,7 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
- *
+ * This class generates {@link SensorEvent}s from Rest Exceptions.
  * @author straubec
  */
 @ControllerAdvice
@@ -24,6 +24,15 @@ public class RestSensorExceptionHandler extends ResponseEntityExceptionHandler {
         this.sensorEventFactory = sensorEventFactory;
     }
     
+    /**
+     * Rest method not supported.
+     * 
+     * @param ex
+     * @param headers
+     * @param status
+     * @param request
+     * @return 
+     */
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         SensorEvent sensorEvent = this.sensorEventFactory.createSensorEvent("Request","METHOD NOT SUPPORTED", request.getUserPrincipal().getName());
@@ -31,6 +40,15 @@ public class RestSensorExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleHttpRequestMethodNotSupported(ex, headers, status, request);
     }
 
+    /**
+     * Method argument not valid.
+     * 
+     * @param ex
+     * @param headers
+     * @param status
+     * @param request
+     * @return 
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         SensorEvent sensorEvent = this.sensorEventFactory.createSensorEvent("Request","BEAN VALIDATION FAILURE", request.getUserPrincipal().getName());
