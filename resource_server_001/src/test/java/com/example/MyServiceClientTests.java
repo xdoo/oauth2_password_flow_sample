@@ -39,21 +39,21 @@ public class MyServiceClientTests {
     @Test
     public void testSayHello() {
         this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withSuccess("Hello Hans!", MediaType.TEXT_PLAIN));
-        String greeting = this.service.sayHello();
-        assertThat(greeting, startsWith("Answer: Hello Hans!"));
+        String greeting = this.service.sayHello(new Hello("Peter", "München"));
+        assertThat(greeting, startsWith("Answer for Peter from München: Hello Hans!"));
     }
     
     @Test
     public void testSayHello401() {
         this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withStatus(HttpStatus.FORBIDDEN));
-        String greeting = this.service.sayHello();
+        String greeting = this.service.sayHello(new Hello("Peter", "München"));
         assertThat(greeting, startsWith("Fallback Answer: Hello World!"));
     }
     
     @Test
     public void testSayHelloServerError() {
         this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withServerError());
-        String greeting = this.service.sayHello();
+        String greeting = this.service.sayHello(new Hello("Peter", "München"));
         assertThat(greeting, startsWith("Fallback Answer: Hello World!"));
     }
     

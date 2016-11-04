@@ -63,15 +63,29 @@ public class MyControllerIntegrationTests implements RestTemplateHolder {
     @OAuth2ContextConfiguration(User2Details.class)
     public void testHello() {
         this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withSuccess("Hello user02!", MediaType.TEXT_PLAIN));
-        ResponseEntity<String> response = this.restOperations.getForEntity(host + "/hello", String.class);
-        assertThat(response.getBody(), startsWith("Answer: Hello user02!"));
+        ResponseEntity<String> response = this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "Munich"), String.class);
+        assertThat(response.getBody(), startsWith("Answer for Peter from Munich: Hello user02!"));
+    }
+    
+    @Test
+    @OAuth2ContextConfiguration(User2Details.class)
+    public void testWrongMethod() {
+        this.exception.expect(HttpClientErrorException.class);
+        this.restOperations.put(host + "/hello", new Hello("Peter", "Munich"));
+    }
+    
+    @Test
+    @OAuth2ContextConfiguration(User2Details.class)
+    public void testBeanValidation() {
+        this.exception.expect(HttpClientErrorException.class);
+        this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "München"), String.class);
     }
     
     @Test
     @OAuth2ContextConfiguration(User1Details.class)
     public void testHelloWithWrongRole() {
         this.exception.expect(UserDeniedAuthorizationException.class);
-        this.restOperations.getForEntity(host + "/hello", String.class);
+        this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "Munich"), String.class);
     }
     
     @Test
@@ -79,7 +93,7 @@ public class MyControllerIntegrationTests implements RestTemplateHolder {
     public void testHelloWithoutSecurity() {
         RestTemplate tmpl = new RestTemplate(); // use rest template with no credentials
         this.exception.expect(HttpClientErrorException.class);
-        tmpl.getForEntity(host + "/hello", String.class);
+        tmpl.postForEntity(host + "/hello", new Hello("Peter", "Munich"), String.class);
     }
     
 
