@@ -17,11 +17,11 @@ public class Hello {
         this.city = city;
     }
 
-    @Pattern(regexp = "[a-zA-Z ]*")
-    @Size(min = 3, max = 50)
+    @Pattern(regexp = "[a-zA-Z -]*")
+    @Size(min = 2, max = 50)
     private String name;
     
-    @Pattern(regexp = "[a-zA-Z ]*")
+    @Pattern(regexp = "[a-zA-Z-]*")
     @Size(min = 3, max = 60)
     private String city;
 
