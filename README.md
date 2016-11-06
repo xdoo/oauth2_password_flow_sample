@@ -51,7 +51,7 @@ $ java -jar oauth-resource-002-0.0.1-SNAPSHOT.jar
 Ok. Now the second resource server, or microservice should be up and running. Go back to the previous (CURL) tab. The Bearer token still exists, so we simply can call:
 
 ```bash
-$ curl -H "Authorization: Bearer $TOKEN" localhost:8070/hello
+$ curl -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -X POST -d {"name": "Hans","city": "Munich"} localhost:8070/hello
 $ Answer: Hello user02
 ```
 Great. We've logged in via OAuth2, called a protected resource and gat a personalized answer back. So the service to service call was not made by technical user, but our infrastructure has downstreamed the token to the next service (to the next security context).
