@@ -37,7 +37,7 @@ $ java -jar oauth-resource-001-0.0.1-SNAPSHOT.jar
 
 Wait for the server and go back to the previous (CURL) tab. The Bearer token still exists, so we simply can call:
 ```bash
-$ curl -H "Authorization: Bearer $TOKEN" localhost:8070/hello
+$ curl -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -X POST -d '{"name": "Hans","city": "Munich"}' localhost:8070/hello
 $ Fallback Answer: Hello World!
 ```
 Hmmm, perhaps something went wrong. We have start our second resource server. Open a new console tab, move to OAUTH_HOME and enter:
@@ -51,19 +51,19 @@ $ java -jar oauth-resource-002-0.0.1-SNAPSHOT.jar
 Ok. Now the second resource server, or microservice should be up and running. Go back to the previous (CURL) tab. The Bearer token still exists, so we simply can call:
 
 ```bash
-$ curl -H "Authorization: Bearer $TOKEN" localhost:8070/hello
-$ Answer: Hello user02
+$ curl -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -X POST -d '{"name": "Hans","city": "Munich"}' localhost:8070/hello
+$ Answer for Hans from Munich: Hello user02!
 ```
 Great. We've logged in via OAuth2, called a protected resource and gat a personalized answer back. So the service to service call was not made by technical user, but our infrastructure has downstreamed the token to the next service (to the next security context).
 
 ### Verify security settings
-To verify, if the security really works as expected, you can call:
+To verify, if the security really works as expected, you can call the API without sending the access token:
 
 ```bash
-$ curl localhost:8070/hello
+$ curl -H "Content-Type: application/json" -X POST -d '{"name": "Hans","city": "Munich"}' localhost:8070/hello
 $ {"error":"unauthorized","error_description":"Full authentication is required to access this resource"}
 ```
-Ok. Perhaps the second server:
+Ok. Perhaps the second server (here we've a simple get):
 ```bash
 $ curl localhost:8071/hello
 $ {"error":"unauthorized","error_description":"Full authentication is required to access this resource"}
@@ -78,7 +78,7 @@ $ TOKEN=41bcf14c-b45f-4c2f-9cda-4735a1f3ebfe
 
 Call the the hello method on our first resource server:
 ```bash
-$ curl -H "Authorization: Bearer $TOKEN" localhost:8070/hello
+$ curl -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -X POST -d '{"name": "Hans","city": "Munich"}' localhost:8070/hello
 $ Fallback Answer: Hello World!
 ```
 Great. Our setup is still the same: OAuth server and our two resource servers. So why we're getting here a fallback answer? I would suspect, that user 1 is not allowed to call hell on service 2 (you can see this in the logs of service 1). Let's check this:
