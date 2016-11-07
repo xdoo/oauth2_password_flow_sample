@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MyController {
     
+    private MyService service;
+
+    public MyController(MyService service) {
+        this.service = service;
+    }
+    
     @PreAuthorize("hasAuthority('RESOURCE_002_HELLO')")
     @RequestMapping("/hello")
     public String hello(Authentication authentication) {   
-        return "Hello " + authentication.getName() + "!\n";
+        return service.hello(authentication);
     }
     
     @PreAuthorize("hasAuthority('RESOURCE_002_HELLOWORLD')")
