@@ -109,7 +109,8 @@ public class AuthorizationServerAdmin extends ResourceServerConfigurerAdapter {
         List<String> scopes = new ArrayList<>();
         scopes.add("read");
         scopes.add("write");
-        detail.setScope(grantTypes);
+        detail.setScope(scopes);
+        
         
         return detail;
     }
