@@ -4,7 +4,7 @@
 - open your console and switch to the root folder of this sample project (OAUTH_HOME)
 
 ### Szenario
-TODO
+![Szenario](screenshot_demo_setup.png)
 
 
 ### Test OAuth2 Server
@@ -87,26 +87,3 @@ $ curl -H "Authorization: Bearer $TOKEN" localhost:8071/hello
 $ {"error":"access_denied","error_description":"Zugriff verweigert"}
 ```
 Ok, great. Our authorization and authentication works perfectly in a microservice environment.
-
-### Test the non Spring client
-
-To test the non Spring client keep the servers above running. Swith to your IDE an run the Main Class ```com.example.NonSpringApplication``` from project 'client'. The application executes the following steps:
-* aquire a new token
-* call a protected resource
-* aquire a fresh token
-* call the protected resource with the fresh token
- 
-The stack trace shows some more details. You could do this using curl as welll:
-
-```bash
-$ curl acme:acmesecret@localhost:9999/uaa/oauth/token -d grant_type=password -d username=admin -d password=password
-$ ...
-$ TOKEN=<PASTE TOKEN HERE>
-$ curl -H "Authorization: Bearer $TOKEN" localhost:8070/hello
-$ ...
-$ curl acme:acmesecret@localhost:9999/uaa/oauth/token -d grant_type=refresh_token -d refresh_token=<PASTE REFRESH TOKEN HERE>
-$ ...
-$ TOKEN=<PASTE FRESH TOKEN HERE>
-$ curl -H "Authorization: Bearer $TOKEN" localhost:8070/hello
-$ ...
-```
