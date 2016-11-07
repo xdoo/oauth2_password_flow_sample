@@ -18,9 +18,15 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
             .inMemoryAuthentication()
-                .withUser("user01").password("password").authorities("USER", "RESOURCE_001_HELLO").and()
-                .withUser("user02").password("password").authorities("USER", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO").and()
-                .withUser("admin").password("admin").authorities("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO");
+                .withUser("user01")
+                    .password("password")
+                    .authorities("USER", "RESOURCE_001_HELLO").and()
+                .withUser("user02")
+                    .password("password")
+                    .authorities("USER", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO").and()
+                .withUser("admin")
+                    .password("admin")
+                    .authorities("USER", "ADMIN", "RESOURCE_001_HELLO", "RESOURCE_002_HELLO");
     }    
     
 }
