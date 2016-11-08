@@ -81,7 +81,7 @@ Call the the hello method on our first resource server:
 $ curl -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -X POST -d '{"name": "Hans","city": "Munich"}' localhost:8070/hello
 $ Fallback Answer: Hello World!
 ```
-Great. Our setup is still the same: OAuth server and our two resource servers. So why we're getting here a fallback answer? I would suspect, that user 1 is not allowed to call hell on service 2 (you can see this in the logs of service 1). Let's check this:
+Great. Our setup is still the same: OAuth server and our two resource servers. So why we're getting here a fallback answer? I would suspect, that user 1 is not allowed to call hello on service 2 (you can see this in the logs of service 1). Let's check this:
 ```bash
 $ curl -H "Authorization: Bearer $TOKEN" localhost:8071/hello
 $ {"error":"access_denied","error_description":"Zugriff verweigert"}
