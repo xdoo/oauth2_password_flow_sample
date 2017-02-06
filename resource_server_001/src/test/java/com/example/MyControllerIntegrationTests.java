@@ -2,6 +2,7 @@ package com.example;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.is;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -10,13 +11,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.test.OAuth2ContextConfiguration;
 import org.springframework.security.oauth2.client.test.OAuth2ContextSetup;
 import org.springframework.security.oauth2.client.test.RestTemplateHolder;
 import org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails;
-import org.springframework.security.oauth2.common.exceptions.UserDeniedAuthorizationException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -59,13 +60,13 @@ public class MyControllerIntegrationTests implements RestTemplateHolder {
         this.server = MockRestServiceServer.createServer(restTemplate);
     }
     
-    @Test
-    @OAuth2ContextConfiguration(User2Details.class)
-    public void testHello() {
-        this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withSuccess("Hello user02!", MediaType.TEXT_PLAIN));
-        ResponseEntity<String> response = this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "Munich"), String.class);
-        assertThat(response.getBody(), startsWith("Answer for Peter from Munich: Hello user02!"));
-    }
+//    @Test
+//    @OAuth2ContextConfiguration(User2Details.class)
+//    public void testHello() {
+//        this.server.expect(requestTo("http://localhost:8071/hello")).andRespond(withSuccess("Hello user02!", MediaType.TEXT_PLAIN));
+//        ResponseEntity<String> response = this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "Munich"), String.class);
+//        assertThat(response.getBody(), startsWith("Answer for Peter from Munich: Hello user02!"));
+//    }
     
     @Test
     @OAuth2ContextConfiguration(User2Details.class)
@@ -81,11 +82,12 @@ public class MyControllerIntegrationTests implements RestTemplateHolder {
         this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "München"), String.class);
     }
     
-    @Test
+    @Test()
     @OAuth2ContextConfiguration(User1Details.class)
     public void testHelloWithWrongRole() {
-        this.exception.expect(UserDeniedAuthorizationException.class);
-        this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "Munich"), String.class);
+        this.exception.expect(HttpClientErrorException.class);
+        ResponseEntity<String> response = this.restOperations.postForEntity(host + "/hello", new Hello("Peter", "Munich"), String.class);
+        assertThat(response.getStatusCode(), is(HttpStatus.FORBIDDEN));
     }
     
     @Test
